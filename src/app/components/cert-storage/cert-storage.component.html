@@ -1,0 +1,39 @@
+<div class="cert-storage-container">
+  <ng-container *ngIf="!isAddingCert;else addingCert">
+    <div class="column">
+      <div class="certificate-btn add-btn" (click)="toggleCertAdding(true)">Додати</div>
+      <ng-container *ngIf="certificates.length;else noCertificates">
+        <app-cert-list [certificates]="certificates"></app-cert-list>
+      </ng-container>
+      <ng-template #noCertificates>
+        <p>Нема жодного сертифікату</p>
+      </ng-template>
+    </div>
+  </ng-container>
+  <ng-template #addingCert>
+    <div class="column">
+      <div class="certificate-btn back-btn" (click)="toggleCertAdding(false)">Назад</div>
+    </div>
+    <ng-container *ngIf="!selectedFiles.length;else filesReview">
+      <div (drop)="dropFile($event)" (dragover)="dragHandler($event, true)" (dragleave)="dragHandler($event, false)" class="drop-container column "
+        [ngClass]="{'drag-over': isDragOver}">
+        Перетягніть файл сертифікату сюди <br> або
+        <label class="certificate-btn" for="file-input">Виберіть через стандартний діалог
+          <input #fileInput id="file-input" type="file" accept=".cer" (change)="uploadFileFromDialog($event)" multiple />
+        </label>
+      </div>
+    </ng-container>
+    <ng-template #filesReview>
+      <div class="files-review">
+        <p class="files-review-title">Обрані файли:</p>
+        <ng-container *ngFor="let file of selectedFiles; let ind = index">
+          <div class="seleted-file">
+            <div class="delete-file-btn" (click)="deleteFile(file)"><img src="/assets/icons/delete.svg"></div>
+            <p class="seleted-file-name">{{file.name}}</p>
+          </div>
+        </ng-container>
+        <div class="certificate-btn upload-btn" (click)="uploadFiles()">Завантажити</div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>
