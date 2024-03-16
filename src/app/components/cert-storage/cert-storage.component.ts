@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Certificate } from 'crypto';
 import { CertService } from 'src/app/cert.service';
-// import x509 from 'js-x509-utils';
+import { CertificateUI } from '../models/certificate-ui';
 
 @Component({
   selector: 'app-cert-storage',
@@ -9,9 +8,10 @@ import { CertService } from 'src/app/cert.service';
   styleUrls: ['./cert-storage.component.sass']
 })
 export class CertStorageComponent implements OnInit {
-  isAddingCert: boolean = true;
+  isAddingCert: boolean = false;
   isDragOver: boolean = false;
-  certificates: Certificate[] = [];
+  certificates: CertificateUI[] = [];
+  displayedCert: CertificateUI | undefined;
   selectedFiles: File[] = [];
 
   constructor(
@@ -19,6 +19,7 @@ export class CertStorageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.certificates = this.certService.getCertificates();
   }
 
   toggleCertAdding(isAddingCert: boolean) {
@@ -44,19 +45,31 @@ export class CertStorageComponent implements OnInit {
   }
 
   async uploadFiles() {
-
-    try {
-      this.certService.uploadFiles(this.selectedFiles);
-      this.isAddingCert = false;
-    }
-    catch (error) {
-      console.error(error);
-      alert(error);
-    }
+    this.certService.uploadFiles(this.selectedFiles);
+    this.isAddingCert = false;
+    this.selectedFiles = [];
   }
 
   deleteFile(file: File) {
     this.selectedFiles = this.selectedFiles.filter(function (w) { return w.name != file.name });
-    console.log(this.selectedFiles);
+  }
+
+  setItem(certificate: CertificateUI) {
+    this.displayedCert = certificate;
+  }
+
+  deleteCert() {
+    if (!this.displayedCert) {
+      return;
+    }
+    this.certService.deleteCert(this.displayedCert);
+    this.certificates = this.certService.getCertificates();
+    this.displayedCert = undefined;
+  }
+
+  deleteAllCerts() {
+    this.certService.deleteAllCerts();
+    this.certificates = this.certService.getCertificates();
+    this.displayedCert = undefined;
   }
 }

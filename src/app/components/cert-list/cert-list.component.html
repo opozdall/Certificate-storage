@@ -1,3 +1,6 @@
 <ng-container *ngFor="let cert of certificates">
-  <p> {{cert.name}}</p>
+  <div (click)="onClickItem(cert)" class="certificate">
+    <div class="name">{{cert.commonName}}</div>
+    <div class="arrow-icon"><img src="/assets/icons/arrow-right.svg"></div>
+  </div>
 </ng-container>

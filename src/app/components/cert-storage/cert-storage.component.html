@@ -1,14 +1,26 @@
 <div class="cert-storage-container">
   <ng-container *ngIf="!isAddingCert;else addingCert">
     <div class="column">
-      <div class="certificate-btn add-btn" (click)="toggleCertAdding(true)">Додати</div>
+      <div class="buttons-top">
+        <div class="certificate-btn add-btn" (click)="toggleCertAdding(true)">Додати</div>
+        <div *ngIf="certificates.length" class="certificate-btn delete-btn" (click)="deleteAllCerts()">Видалити всі</div>
+      </div>
       <ng-container *ngIf="certificates.length;else noCertificates">
-        <app-cert-list [certificates]="certificates"></app-cert-list>
+        <app-cert-list (setCertificate)="setItem($event)" [certificates]="certificates"></app-cert-list>
       </ng-container>
       <ng-template #noCertificates>
         <p>Нема жодного сертифікату</p>
       </ng-template>
     </div>
+    <ng-container *ngIf="displayedCert">
+      <div class="cert-info">
+        <p><b> Name: </b> {{ displayedCert.commonName }}</p>
+        <p><b>Issuer Cn: </b>{{ displayedCert.issuerCn }}</p>
+        <p><b>Valid From:</b> {{ displayedCert.validFrom | date: "yyyy-LL-dd" }}</p>
+        <p><b>Valid Till:</b> {{ displayedCert.validTo | date: "yyyy-LL-dd" }}</p>
+        <div (click)="deleteCert()" class="certificate-btn">Видалити</div>
+      </div>
+    </ng-container>
   </ng-container>
   <ng-template #addingCert>
     <div class="column">
