@@ -11,7 +11,7 @@ export class CertStorageComponent implements OnInit {
   isAddingCert: boolean = false;
   isDragOver: boolean = false;
   certificates: CertificateUI[] = [];
-  displayedCert: CertificateUI | undefined;
+  activeCert: CertificateUI | undefined;
   selectedFiles: File[] = [];
 
   constructor(
@@ -54,22 +54,22 @@ export class CertStorageComponent implements OnInit {
     this.selectedFiles = this.selectedFiles.filter(function (w) { return w.name != file.name });
   }
 
-  setItem(certificate: CertificateUI) {
-    this.displayedCert = certificate;
+  setActiveCert(certificate: CertificateUI) {
+    this.activeCert = certificate;
   }
 
   deleteCert() {
-    if (!this.displayedCert) {
+    if (!this.activeCert) {
       return;
     }
-    this.certService.deleteCert(this.displayedCert);
+    this.certService.deleteCert(this.activeCert);
     this.certificates = this.certService.getCertificates();
-    this.displayedCert = undefined;
+    this.activeCert = undefined;
   }
 
   deleteAllCerts() {
     this.certService.deleteAllCerts();
     this.certificates = this.certService.getCertificates();
-    this.displayedCert = undefined;
+    this.activeCert = undefined;
   }
 }

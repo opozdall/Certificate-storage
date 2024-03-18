@@ -8,6 +8,7 @@ import { CertificateUI } from '../models/certificate-ui';
 })
 export class CertListComponent {
   @Input() certificates: CertificateUI[] = [];
+  @Input() activeCert: CertificateUI | undefined;
   @Output() setCertificate = new EventEmitter<CertificateUI>();
 
   constructor() { }

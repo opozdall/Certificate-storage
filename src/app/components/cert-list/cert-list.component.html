@@ -1,5 +1,5 @@
 <ng-container *ngFor="let cert of certificates">
-  <div (click)="onClickItem(cert)" class="certificate">
+  <div (click)="onClickItem(cert)" class="certificate" [ngClass]="{'active': activeCert === cert}">
     <div class="name">{{cert.commonName}}</div>
     <div class="arrow-icon"><img src="/assets/icons/arrow-right.svg"></div>
   </div>
